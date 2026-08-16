@@ -7,19 +7,28 @@
   --text: #111827;
 }
 *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
-body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#e6eefc 0%,var(--bg) 100%);color:var(--text);padding:20px}
-.calculator{width:360px;background:var(--panel);border-radius:12px;padding:16px;color:#fff;box-shadow:0 10px 30px rgba(2,6,23,0.5)}
+html,body{height:100%}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#e6eefc 0%,var(--bg) 100%);color:var(--text);padding:18px}
+.calculator{width:380px;background:var(--panel);border-radius:12px;padding:16px;color:#fff;box-shadow:0 10px 30px rgba(2,6,23,0.5)}
 header{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
 header h1{margin:0;font-size:18px}
-.subtitle{margin:0;font-size:12px;opacity:0.85}
-.display{width:100%;height:56px;border-radius:8px;border:none;margin-bottom:12px;padding:10px;font-size:22px;text-align:right;background:linear-gradient(180deg,#0f1724,#111827);color:#fff;outline:none}
+.subtitle{margin:0;font-size:12px;opacity:0.9}
+.display{width:100%;height:64px;border-radius:10px;border:none;margin-bottom:12px;padding:12px;font-size:22px;text-align:right;background:linear-gradient(180deg,#0f1724,#111827);color:#fff;outline:none}
 .keys{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.btn{background:var(--btn);border:none;padding:12px;font-size:16px;border-radius:8px;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,0.08);transition:transform .06s ease,box-shadow .06s ease}
+.btn{background:var(--btn);border:none;padding:14px;font-size:16px;border-radius:10px;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,0.08);transition:transform .06s ease,box-shadow .06s ease}
 .btn:active{transform:translateY(2px);box-shadow:none}
 .operator{background:var(--op);color:#fff;font-weight:600}
 .equals{grid-column:4/5;background:var(--accent);color:#fff;font-weight:700}
 .zero{grid-column:1/3}
 .fn{background:#374151;color:#fff}
 .mem{background:#6b7280;color:#fff;font-weight:600}
-footer{margin-top:10px;color:rgba(255,255,255,0.6);font-size:11px}
-@media (max-width:420px){.calculator{width:100%}}
+.install-row{display:flex;gap:8px;align-items:center;margin-top:10px}
+.install{background:#10b981;color:#fff}
+.install-hint{font-size:12px;color:rgba(255,255,255,0.75)}
+footer{margin-top:10px;color:rgba(255,255,255,0.7);font-size:11px}
+
+/* Focus styles for accessibility */
+.btn:focus{outline:3px solid rgba(37,99,235,0.25);outline-offset:2px}
+.display:focus{outline:3px solid rgba(37,99,235,0.25)}
+
+@media (max-width:420px){.calculator{width:100%;padding:12px}.display{height:56px;font-size:20px}.btn{padding:14px;font-size:18px}}

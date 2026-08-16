@@ -1,0 +1,14 @@
+{
+  "name": "land-surveying-calculator",
+  "version": "1.0.0",
+  "description": "Installable calculator — safe parser and PWA for Land Surveying Pro",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager . LandSurveyCalc --platform=darwin,win32,linux --arch=x64 --out=dist --overwrite"
+  },
+  "devDependencies": {
+    "electron": "^25.0.0",
+    "electron-packager": "^17.1.0"
+  }
+}

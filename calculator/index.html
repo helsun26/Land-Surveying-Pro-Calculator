@@ -2,20 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Calculator — Land Surveying Pro</title>
+
+  <!-- PWA manifest & theme -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111827">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <main class="calculator" role="application" aria-label="Calculator">
     <header>
       <h1>Calculator</h1>
-      <p class="subtitle">Safe expression parser • memory • trig &amp; power</p>
+      <p class="subtitle">Safe expression parser • memory • trig &amp; power • PWA installable</p>
     </header>
 
     <input id="display" class="display" type="text" aria-label="Calculator display" readonly>
 
-    <div class="keys">
+    <div class="keys" role="group" aria-label="Calculator keys">
       <button class="btn" data-action="clear">C</button>
       <button class="btn" data-action="back">⌫</button>
       <button class="btn" data-action="percent">%</button>
@@ -52,8 +60,13 @@
       <button class="btn mem" data-action="mminus">M-</button>
     </div>
 
+    <div class="install-row" aria-hidden="true">
+      <button id="installBtn" class="btn install">Install App</button>
+      <span id="installHint" class="install-hint"></span>
+    </div>
+
     <footer>
-      <small>Files: /calculator — Open index.html in a browser. Parser uses Shunting-yard + RPN evaluator (no eval).</small>
+      <small>Files: /calculator — Open index.html in a browser or install as a PWA. Trig uses radians by default.</small>
     </footer>
   </main>
 

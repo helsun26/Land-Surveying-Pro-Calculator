@@ -1,8 +1,12 @@
-// script.js — safe parser (shunting-yard) + RPN evaluator, memory, and UI handling
+// script.js — safe parser (shunting-yard) + RPN evaluator, memory, PWA install handling, and UI improvements
 const display = document.getElementById('display');
 const keys = document.querySelector('.keys');
+const installBtn = document.getElementById('installBtn');
+const installRow = document.querySelector('.install-row');
+const installHint = document.getElementById('installHint');
 let expr = ''; // user-visible expression (infix)
 let memory = 0;
+let deferredPrompt = null;
 
 function updateDisplay(){ display.value = expr || '0'; }
 
@@ -143,7 +147,9 @@ function doCalculate(){
     // sanitize: allow digits, operators, letters, parentheses, dot, percent
     if (!/^[0-9A-Za-z+\-*/^().%\s]*$/.test(expr)) { display.value = 'Error'; expr=''; return; }
     const res = calculateExpression(expr);
-    expr = String(res);
+    // handle small rounding errors
+    const rounded = Math.round((res + Number.EPSILON) * 1e12) / 1e12;
+    expr = String(rounded);
     updateDisplay();
   } catch (e){
     display.value = 'Error'; expr = '';
@@ -166,10 +172,10 @@ keys.addEventListener('click', e =>{
 
   if (action && action.startsWith('m')){
     // memory ops
-    if (action === 'mc') { memory = 0; return; }
+    if (action === 'mc') { memory = 0; installHint.textContent = 'Memory cleared'; setTimeout(()=>installHint.textContent='',1500); return; }
     if (action === 'mr') { expr += String(memory); updateDisplay(); return; }
-    if (action === 'mplus') { try{ const val = calculateExpression(expr); memory += Number(val); } catch(_){} return; }
-    if (action === 'mminus') { try{ const val = calculateExpression(expr); memory -= Number(val); } catch(_){} return; }
+    if (action === 'mplus') { try{ const val = calculateExpression(expr); memory += Number(val); installHint.textContent = 'Added to memory'; setTimeout(()=>installHint.textContent='',1500);} catch(_){installHint.textContent='Memory error'; setTimeout(()=>installHint.textContent='',1500);} return; }
+    if (action === 'mminus') { try{ const val = calculateExpression(expr); memory -= Number(val); installHint.textContent = 'Subtracted from memory'; setTimeout(()=>installHint.textContent='',1500);} catch(_){installHint.textContent='Memory error'; setTimeout(()=>installHint.textContent='',1500);} return; }
   }
 
   if (fn){ applyFunction(fn); return; }
@@ -187,3 +193,43 @@ window.addEventListener('keydown', e =>{
 });
 
 updateDisplay();
+
+// --- PWA: service worker registration and install prompt handling ---
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => {
+      console.warn('Service worker registration failed:', err);
+    });
+  });
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the mini-infobar from appearing on mobile
+  e.preventDefault();
+  deferredPrompt = e; // Save the event for later
+  installRow.setAttribute('aria-hidden','false');
+  installBtn.style.display = 'inline-block';
+});
+
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) {
+    // On Safari or unsupported browsers, show hint
+    installHint.textContent = 'To install: use your browser menu (Add to Home screen)';
+    return;
+  }
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    installHint.textContent = 'App installed';
+  } else {
+    installHint.textContent = 'Install dismissed';
+  }
+  deferredPrompt = null;
+  setTimeout(()=>installHint.textContent='',2000);
+});
+
+// provide manual hint for platforms that don't fire beforeinstallprompt
+if (!('BeforeInstallPromptEvent' in window)){
+  // show hint text for some browsers (e.g., Safari)
+  installHint.textContent = 'Use browser menu → Add to Home Screen';
+}
