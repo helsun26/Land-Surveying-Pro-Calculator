@@ -4,10 +4,15 @@ const state = {
   precision: 4,
   stationRows: [],
   loadedPoints: [],
+  lastTraverse: null,
 };
 
 function getPrecision() {
   return Number(document.getElementById('precision').value || 4);
+}
+
+function setPrecision(value) {
+  state.precision = Number(value || 4);
 }
 
 function roundNumber(value, digits = getPrecision()) {
@@ -72,6 +77,21 @@ function formatDistance(value) {
 function formatAngle(value) {
   const finalValue = fromSelectedAngle(value);
   return roundNumber(finalValue);
+}
+
+function updateSummaryCards() {
+  const closureValue = state.lastTraverse ? state.lastTraverse.closure : 0;
+  const precisionValue = state.lastTraverse ? state.lastTraverse.relativePrecision : 0;
+
+  const closureEl = document.getElementById('summaryClosure');
+  const precisionEl = document.getElementById('summaryPrecisionValue');
+  const loadedPointsEl = document.getElementById('summaryLoadedPoints');
+  const stationCountEl = document.getElementById('summaryStations');
+
+  if (closureEl) closureEl.textContent = `${formatDistance(closureValue)} ${state.distanceUnit}`;
+  if (precisionEl) precisionEl.textContent = Number(precisionValue).toFixed(8);
+  if (loadedPointsEl) loadedPointsEl.textContent = String(state.loadedPoints.length);
+  if (stationCountEl) stationCountEl.textContent = String(state.stationRows.length);
 }
 
 function calcCoordinateFromBearing(startX, startY, bearingDeg, distance) {
@@ -319,24 +339,26 @@ function parseBatchPoints() {
   }
 
   state.loadedPoints = points;
+  updateSummaryCards();
   return points;
 }
 
 function buildSummaryCsv() {
-  const rows = [
+  const summaryRows = [
     ['measurement', 'value'],
     ['distance_unit', state.distanceUnit],
     ['angle_unit', state.angleUnit],
     ['precision', getPrecision()],
+    ['loaded_points', state.loadedPoints.length],
+    ['station_count', state.stationRows.length],
   ];
 
-  if (state.stationRows.length) {
-    rows.push(['station_count', state.stationRows.length]);
-    rows.push(['first_station', state.stationRows[0].station]);
-    rows.push(['last_station', state.stationRows[state.stationRows.length - 1].station]);
+  if (state.lastTraverse) {
+    summaryRows.push(['closure_error', state.lastTraverse.closure]);
+    summaryRows.push(['relative_precision', state.lastTraverse.relativePrecision]);
   }
 
-  return rows;
+  return summaryRows;
 }
 
 function readDistanceInput(elementId) {
@@ -348,14 +370,11 @@ function readAngleInput(elementId) {
   return fromSelectedAngle(raw);
 }
 
-function readDistanceInputForDisplay(elementId) {
-  return toSelectedDistance(ensureNumber(document.getElementById(elementId).value, 'Distance'));
-}
-
 function registerUnitSync() {
   document.getElementById('distanceUnit').addEventListener('change', (event) => {
     state.distanceUnit = event.target.value;
     renderStationTable(state.stationRows);
+    updateSummaryCards();
   });
 
   document.getElementById('angleUnit').addEventListener('change', (event) => {
@@ -364,7 +383,9 @@ function registerUnitSync() {
   });
 
   document.getElementById('precision').addEventListener('change', () => {
+    setPrecision(document.getElementById('precision').value);
     renderStationTable(state.stationRows);
+    updateSummaryCards();
   });
 }
 
@@ -451,9 +472,11 @@ document.getElementById('stationBtn').addEventListener('click', () => {
     );
 
     renderStationTable(state.stationRows);
+    updateSummaryCards();
   } catch (error) {
     setResult('stationResult', `<span class="error">${error.message}</span>`);
     renderStationTable([]);
+    updateSummaryCards();
   }
 });
 
@@ -486,17 +509,26 @@ document.getElementById('traverseBtn').addEventListener('click', () => {
     const inputValue = document.getElementById('traverseInput').value;
     const legs = parseTraverseLegs(inputValue);
     const result = calcTraverseClosure(legs);
+    state.lastTraverse = result;
+
+    const tolerance = 0.0001;
+    const warningText = result.closure > tolerance
+      ? `<span class="warning">Warning: closure exceeds tolerance (${roundNumber(tolerance, 8)}). Review the traverse for potential misclosure.</span><br>`
+      : `<span class="success">Traverse is within tolerance.</span><br>`;
 
     setResult(
       'traverseResult',
       `
         <strong>Traverse Closure:</strong><br>
+        ${warningText}
         Final ΔX: <span class="success">${formatDistance(result.dx)}</span> ${state.distanceUnit}<br>
         Final ΔY: <span class="success">${formatDistance(result.dy)}</span> ${state.distanceUnit}<br>
         Closure Error: <span class="success">${formatDistance(result.closure)}</span> ${state.distanceUnit}<br>
         Relative Precision: <span class="success">${roundNumber(result.relativePrecision, 8)}</span>
       `
     );
+
+    updateSummaryCards();
   } catch (error) {
     setResult('traverseResult', `<span class="error">${error.message}</span>`);
   }
@@ -506,6 +538,7 @@ document.getElementById('loadBatchBtn').addEventListener('click', () => {
   try {
     const points = parseBatchPoints();
     setResult('coordResult', `<span class="success">Loaded ${points.length} points from batch input.</span>`);
+    updateSummaryCards();
   } catch (error) {
     setResult('coordResult', `<span class="error">${error.message}</span>`);
   }
@@ -544,3 +577,4 @@ document.getElementById('exportSummaryBtn').addEventListener('click', () => {
 
 registerUnitSync();
 renderStationTable([]);
+updateSummaryCards();

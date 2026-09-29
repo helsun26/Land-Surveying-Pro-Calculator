@@ -36,7 +36,7 @@ body {
   justify-content: space-between;
   align-items: flex-end;
   gap: 18px;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   padding: 18px 22px;
   border: 1px solid var(--line);
   background: rgba(17, 24, 39, 0.85);
@@ -66,6 +66,35 @@ h1 {
 
 .settings-panel label {
   min-width: 150px;
+}
+
+.summary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.summary-card {
+  background: rgba(17, 24, 39, 0.85);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summary-label {
+  color: var(--muted);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.summary-card strong {
+  font-size: 1.3rem;
 }
 
 .grid-layout {
@@ -241,6 +270,7 @@ textarea {
     align-items: flex-start;
   }
 
+  .summary-strip,
   .form-grid,
   .data-tools {
     grid-template-columns: 1fr;

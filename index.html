@@ -43,6 +43,25 @@
         </div>
       </header>
 
+      <section class="summary-strip">
+        <div class="summary-card">
+          <span class="summary-label">Loaded Points</span>
+          <strong id="summaryLoadedPoints">0</strong>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Station Count</span>
+          <strong id="summaryStations">0</strong>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Closure Error</span>
+          <strong id="summaryClosure">0.0000</strong>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Relative Precision</span>
+          <strong id="summaryPrecisionValue">0.000000</strong>
+        </div>
+      </section>
+
       <main class="grid-layout">
         <section class="panel">
           <h2>1. Coordinate from Bearing & Distance</h2>
@@ -206,7 +225,7 @@
 
             <div class="data-block">
               <label>
-                Export Station Coordinates
+                Export Reports
               </label>
               <div class="button-row">
                 <button id="exportStationBtn" class="secondary-btn">Export Station CSV</button>
