@@ -13,6 +13,34 @@
           <p class="eyebrow">Surveying Toolkit</p>
           <h1>Land Surveying Pro Calculator</h1>
         </div>
+
+        <div class="settings-panel">
+          <label>
+            Distance Unit
+            <select id="distanceUnit">
+              <option value="m">Meters</option>
+              <option value="ft">Feet</option>
+            </select>
+          </label>
+
+          <label>
+            Angle Unit
+            <select id="angleUnit">
+              <option value="deg">Degrees</option>
+              <option value="rad">Radians</option>
+            </select>
+          </label>
+
+          <label>
+            Precision
+            <select id="precision">
+              <option value="2">2 decimal places</option>
+              <option value="3">3 decimal places</option>
+              <option value="4" selected>4 decimal places</option>
+              <option value="6">6 decimal places</option>
+            </select>
+          </label>
+        </div>
       </header>
 
       <main class="grid-layout">
@@ -28,7 +56,7 @@
               <input id="coordStartY" type="number" value="0" step="0.001" />
             </label>
             <label>
-              Bearing (°)
+              Bearing
               <input id="coordBearing" type="number" value="45" step="0.001" />
             </label>
             <label>
@@ -151,12 +179,41 @@
             <label>
               Legs (one per line: bearing, distance)
               <textarea id="traverseInput" rows="10">45, 50
- 90, 40
- 135, 30</textarea>
+90, 40
+135, 30</textarea>
             </label>
           </div>
           <button id="traverseBtn" class="primary-btn">Check Closure</button>
           <div id="traverseResult" class="result-box"></div>
+        </section>
+
+        <section class="panel wide-panel">
+          <h2>6. CSV & Data Tools</h2>
+
+          <div class="data-tools">
+            <div class="data-block">
+              <label>
+                Batch Points (x,y per line)
+                <textarea id="batchPointsInput" rows="8">0,0
+100,0
+100,50</textarea>
+              </label>
+              <div class="button-row">
+                <button id="loadBatchBtn" class="secondary-btn">Load Points</button>
+                <button id="exportBatchBtn" class="secondary-btn">Export CSV</button>
+              </div>
+            </div>
+
+            <div class="data-block">
+              <label>
+                Export Station Coordinates
+              </label>
+              <div class="button-row">
+                <button id="exportStationBtn" class="secondary-btn">Export Station CSV</button>
+                <button id="exportSummaryBtn" class="secondary-btn">Export Summary CSV</button>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
     </div>
@@ -164,48 +221,3 @@
     <script src="script.js"></script>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
