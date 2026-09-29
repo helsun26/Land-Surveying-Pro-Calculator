@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Land Surveying Pro Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Surveying Toolkit</p>
+          <h1>Land Surveying Pro Calculator</h1>
+        </div>
+      </header>
+
+      <main class="grid-layout">
+        <section class="panel">
+          <h2>1. Coordinate from Bearing & Distance</h2>
+          <div class="form-grid">
+            <label>
+              Start X
+              <input id="coordStartX" type="number" value="0" step="0.001" />
+            </label>
+            <label>
+              Start Y
+              <input id="coordStartY" type="number" value="0" step="0.001" />
+            </label>
+            <label>
+              Bearing (°)
+              <input id="coordBearing" type="number" value="45" step="0.001" />
+            </label>
+            <label>
+              Distance
+              <input id="coordDistance" type="number" value="100" step="0.001" min="0" />
+            </label>
+          </div>
+          <button id="coordBtn" class="primary-btn">Calculate Coordinate</button>
+          <div id="coordResult" class="result-box"></div>
+        </section>
+
+        <section class="panel">
+          <h2>2. Bearing & Distance Between 2 Points</h2>
+          <div class="form-grid">
+            <label>
+              Point A X
+              <input id="pointAX" type="number" value="0" step="0.001" />
+            </label>
+            <label>
+              Point A Y
+              <input id="pointAY" type="number" value="0" step="0.001" />
+            </label>
+            <label>
+              Point B X
+              <input id="pointBX" type="number" value="100" step="0.001" />
+            </label>
+            <label>
+              Point B Y
+              <input id="pointBY" type="number" value="0" step="0.001" />
+            </label>
+          </div>
+          <button id="pointBtn" class="primary-btn">Calculate Bearing & Distance</button>
+          <div id="pointResult" class="result-box"></div>
+        </section>
+
+        <section class="panel">
+          <h2>3. Stationing & Left/Right Offset</h2>
+          <div class="form-grid">
+            <label>
+              Baseline Start X
+              <input id="lineStartX" type="number" value="0" step="0.001" />
+            </label>
+            <label>
+              Baseline Start Y
+              <input id="lineStartY" type="number" value="0" step="0.001" />
+            </label>
+            <label>
+              Baseline End X
+              <input id="lineEndX" type="number" value="100" step="0.001" />
+            </label>
+            <label>
+              Baseline End Y
+              <input id="lineEndY" type="number" value="0" step="0.001" />
+            </label>
+            <label>
+              Interval
+              <input id="stationInterval" type="number" value="20" step="0.001" min="0.001" />
+            </label>
+            <label>
+              Offset Distance
+              <input id="offsetDistance" type="number" value="5" step="0.001" />
+            </label>
+            <label>
+              Offset Side
+              <select id="offsetSide">
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+              </select>
+            </label>
+            <label>
+              Start Station
+              <input id="stationStart" type="number" value="0" step="1" />
+            </label>
+          </div>
+          <button id="stationBtn" class="primary-btn">Generate Station Points</button>
+          <div id="stationResult" class="result-box"></div>
+          <table class="data-table" id="stationTable">
+            <thead>
+              <tr>
+                <th>Station</th>
+                <th>Chainage</th>
+                <th>Offset X</th>
+                <th>Offset Y</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <section class="panel">
+          <h2>4. Height / RL / Grade Calculator</h2>
+          <div class="form-grid">
+            <label>
+              Horizontal Distance
+              <input id="heightDistance" type="number" value="50" step="0.001" min="0" />
+            </label>
+            <label>
+              Starting RL
+              <input id="heightStartRL" type="number" value="100" step="0.001" />
+            </label>
+            <label>
+              Slope Type
+              <select id="heightMode">
+                <option value="angle">Angle (°)</option>
+                <option value="grade">Grade (%)</option>
+              </select>
+            </label>
+            <label>
+              Value
+              <input id="heightValue" type="number" value="5" step="0.001" />
+            </label>
+          </div>
+          <button id="heightBtn" class="primary-btn">Calculate Elevation</button>
+          <div id="heightResult" class="result-box"></div>
+        </section>
+
+        <section class="panel">
+          <h2>5. Traverse Closure</h2>
+          <div class="form-grid single-column">
+            <label>
+              Legs (one per line: bearing, distance)
+              <textarea id="traverseInput" rows="10">45, 50
+ 90, 40
+ 135, 30</textarea>
+            </label>
+          </div>
+          <button id="traverseBtn" class="primary-btn">Check Closure</button>
+          <div id="traverseResult" class="result-box"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
